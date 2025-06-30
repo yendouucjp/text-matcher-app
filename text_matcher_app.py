@@ -41,4 +41,29 @@ if st.button("✅ マッチング実行"):
 
         result_df = pd.DataFrame(matches)
         st.success("✅ マッチング完了！（意味ベース）")
+                result_df = pd.DataFrame(matches)
+
+        # 👇 類似度で降順ソート（高い順）
+        result_df = result_df.sort_values(by="類似度", ascending=False)
+
+        st.success("✅ マッチング完了！（意味ベース）")
         st.dataframe(result_df)
+# 類似度による色分け関数
+def highlight_similarity(val):
+    if val >= 0.8:
+        return "background-color: lightgreen"
+    elif val >= 0.5:
+        return "background-color: khaki"
+    else:
+        return "background-color: lightgray"
+
+# 類似度順にソート
+result_df = pd.DataFrame(matches)
+result_df = result_df.sort_values(by="類似度", ascending=False)
+
+# 色付きで表示
+styled_df = result_df.style.applymap(highlight_similarity, subset=["類似度"])
+st.success("✅ マッチング完了！（意味ベース）")
+st.dataframe(styled_df)
+
+
