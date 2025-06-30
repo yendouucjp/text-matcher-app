@@ -13,6 +13,14 @@ a_input = st.text_area("✏️ A群のテキスト（1行1テキスト）", heig
 b_input = st.text_area("✏️ B群のテキスト（1行1テキスト）", height=200)
 top_n = st.slider("各Aテキストに対して表示するBテキストの数", 1, 5, 1)
 
+def highlight_similarity(val):
+    if val >= 0.8:
+        return "background-color: lightgreen"
+    elif val >= 0.5:
+        return "background-color: khaki"
+    else:
+        return "background-color: lightgray"
+
 if st.button("✅ マッチング実行"):
     group_a = [line.strip() for line in a_input.split("\n") if line.strip()]
     group_b = [line.strip() for line in b_input.split("\n") if line.strip()]
@@ -37,5 +45,8 @@ if st.button("✅ マッチング実行"):
                 })
 
         result_df = pd.DataFrame(matches)
+        result_df = result_df.sort_values(by="類似度", ascending=False)
+        styled_df = result_df.style.applymap(highlight_similarity, subset=["類似度"])
+
         st.success("✅ マッチング完了！（意味ベース）")
-        st.dataframe(result_df)
+        st.dataframe(styled_df)
