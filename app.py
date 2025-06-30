@@ -46,7 +46,12 @@ if st.button("✅ マッチング実行"):
 
         result_df = pd.DataFrame(matches)
         result_df = result_df.sort_values(by="類似度", ascending=False)
+
+        # 類似度を左端に並び替え
+        cols = ["類似度"] + [col for col in result_df.columns if col != "類似度"]
+        result_df = result_df[cols]
+
         styled_df = result_df.style.applymap(highlight_similarity, subset=["類似度"])
 
         st.success("✅ マッチング完了！（意味ベース）")
-        st.dataframe(styled_df)
+        st.write(styled_df)
